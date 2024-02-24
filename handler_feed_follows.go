@@ -10,10 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func (apiCg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request, user database.User) {
+func (apiCg *apiConfig) handlerCreateFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
 	type parameters struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
+		FeedId uuid.UUID `json:"feed_id"`
 	}
 	decoder := json.NewDecoder(r.Body)
 
@@ -23,13 +22,12 @@ func (apiCg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request
 		respondWithError(w, 400, fmt.Sprintf("Error parsing json %v", err))
 	}
 
-	feed, err := apiCg.DB.CreateFeed(r.Context(), database.CreateFeedParams{
+	feedFollows, err := apiCg.DB.CreateFeedFollows(r.Context(), database.CreateFeedFollowsParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		Name:      params.Name,
-		Url:       params.URL,
 		UserID:    user.ID,
+		FeedID:    params.FeedId,
 	})
 
 	if err != nil {
@@ -37,14 +35,14 @@ func (apiCg *apiConfig) handlerCreateFeed(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	respondWithJSON(w, 201, databaseFeedToFeed(feed))
+	respondWithJSON(w, 201, databaseFeedsToFeedsFollows(feedFollows))
 }
 
-func (apiCg *apiConfig) handlerGetFeeds(w http.ResponseWriter, r *http.Request) {
-	feeds, err := apiCg.DB.GetFeed(r.Context())
+func (apiCg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
+	feeds, err := apiCg.DB.GetFeedFollows(r.Context(), user.ID)
 	if err != nil {
 		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed %v", err))
 		return
 	}
-	respondWithJSON(w, 201, databaseFeedsToFeeds(feeds))
+	respondWithJSON(w, 201, databaseFeedsToFeedsFollowsAll(feeds))
 }
