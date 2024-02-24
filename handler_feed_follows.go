@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Kiranraj27/go/internal/database"
+	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 )
 
@@ -45,4 +46,21 @@ func (apiCg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Req
 		return
 	}
 	respondWithJSON(w, 201, databaseFeedsToFeedsFollowsAll(feeds))
+}
+
+func (apiCg *apiConfig) handlerDeleteFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
+	idString := chi.URLParam(r, "id")
+	id, err := uuid.Parse(idString)
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Error parsing json %v", err))
+	}
+	err = apiCg.DB.DeleteFeedFollows(r.Context(), database.DeleteFeedFollowsParams{
+		ID:     id,
+		UserID: user.ID,
+	})
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed %v", err))
+		return
+	}
+	respondWithJSON(w, 201, "Deleted")
 }
