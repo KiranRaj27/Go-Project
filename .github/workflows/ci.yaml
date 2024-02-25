@@ -25,7 +25,8 @@ jobs:
         run: go install github.com/securego/gosec/v2/cmd/gosec@latest
 
       - name: Run security check
-        run: gosec -exclude=internal/database/*  ./...
+        run: |
+          find . -type d \( -path "./internal/database" -o -path "./other/excluded/directory" \) -prune -o -name '*.go' -exec gosec {} +
 
   style:
     name: Style
