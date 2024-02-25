@@ -32,7 +32,7 @@ func (apiCg *apiConfig) handlerCreateFeedFollows(w http.ResponseWriter, r *http.
 	})
 
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed %v", err))
+		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed follow %v", err))
 		return
 	}
 
@@ -42,7 +42,7 @@ func (apiCg *apiConfig) handlerCreateFeedFollows(w http.ResponseWriter, r *http.
 func (apiCg *apiConfig) handlerGetFeedFollows(w http.ResponseWriter, r *http.Request, user database.User) {
 	feeds, err := apiCg.DB.GetFeedFollows(r.Context(), user.ID)
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed %v", err))
+		respondWithError(w, 400, fmt.Sprintf("Couldn't get a feed follows %v", err))
 		return
 	}
 	respondWithJSON(w, 201, databaseFeedsToFeedsFollowsAll(feeds))
@@ -59,8 +59,8 @@ func (apiCg *apiConfig) handlerDeleteFeedFollows(w http.ResponseWriter, r *http.
 		UserID: user.ID,
 	})
 	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("Couldn't create a feed %v", err))
+		respondWithError(w, 400, fmt.Sprintf("Couldn't delete a feed follows %v", err))
 		return
 	}
-	respondWithJSON(w, 201, "Deleted")
+	respondWithJSON(w, 200, struct{}{})
 }
