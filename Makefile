@@ -1,4 +1,7 @@
-.PHONY: build run clean
+.PHONY: build migrationup generate clean
+
+build:
+	go build -o rssagg && ./rssagg
 
 migrationup:
 	cd sql/schema && goose postgres postgres://postgres:kiranraj27@localhost:5432/rssagg up
@@ -8,9 +11,6 @@ migrationdown:
 
 generate:
 	sqlc generate
-
-build:
-	go build -o rssagg && ./rssagg
 
 clean:
 	rm -f rssagg
