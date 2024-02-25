@@ -1,6 +1,6 @@
 module github.com/Kiranraj27/go
 
-go 1.21.1
+go 1.20
 
 require (
 	github.com/go-chi/chi v1.5.5
