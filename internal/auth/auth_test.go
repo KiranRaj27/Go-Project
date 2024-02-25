@@ -1,12 +1,12 @@
 package auth
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 )
 
 func TestGetApiKey(t *testing.T) {
-	// Define test cases
 	testCases := []struct {
 		name          string
 		headers       http.Header
@@ -27,7 +27,7 @@ func TestGetApiKey(t *testing.T) {
 				"Content-Type": []string{"application/json"},
 			},
 			expectedKey:   "",
-			expectedError: "no authentication info found", // Corrected typo
+			expectedError: "no authentication info found",
 		},
 		{
 			name: "MalformedHeader",
@@ -47,20 +47,20 @@ func TestGetApiKey(t *testing.T) {
 		},
 	}
 
-	// Run test cases
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			key, err := GetApiKey(tc.headers)
 
-			// Check if the error matches the expected error
 			if err != nil && err.Error() != tc.expectedError {
 				t.Errorf("Expected error: %v, got: %v", tc.expectedError, err.Error())
 			}
 
-			// Check if the key matches the expected key
 			if key != tc.expectedKey {
 				t.Errorf("Expected key: %v, got: %v", tc.expectedKey, key)
 			}
+
+			fmt.Println("Actual error:", err)
 		})
 	}
+
 }
