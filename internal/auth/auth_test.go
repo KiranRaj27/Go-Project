@@ -27,7 +27,7 @@ func TestGetApiKey(t *testing.T) {
 				"Content-Type": []string{"application/json"},
 			},
 			expectedKey:   "",
-			expectedError: "no authentication info found",
+			expectedError: "no authentication info found", // Corrected typo
 		},
 		{
 			name: "MalformedHeader",
