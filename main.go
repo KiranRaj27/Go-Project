@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Kiranraj27/go/internal/database"
 	"github.com/go-chi/chi"
@@ -21,7 +22,10 @@ type apiConfig struct {
 
 func main() {
 
-	godotenv.Load(".env")
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Unable to load the env")
+	}
 
 	portString := os.Getenv("PORT")
 	if portString == "" {
@@ -72,8 +76,9 @@ func main() {
 	router.Mount("/v1", v1Router)
 
 	srv := &http.Server{
-		Handler: router,
-		Addr:    ":" + portString,
+		Handler:           router,
+		Addr:              ":" + portString,
+		ReadHeaderTimeout: time.Duration(5) * time.Second,
 	}
 
 	log.Printf("Server starting on PORT %v", portString)
