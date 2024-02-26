@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Get the name of the remote and the URL
+remote="$1"
+url="$2"
+
+# Extract the branch being pushed
+while read local_ref local_sha remote_ref remote_sha
+do
+    branch=$(git rev-parse --symbolic --abbrev-ref $local_ref)
+    break
+done
+
+# Check if the branch being pushed is the main branch
+if [[ "$branch" == "main" ]]; then
+  echo "Error: You are not allowed to push directly to the main branch."
+  exit 1
+fi
+
+# Allow the push for other branches
+exit 0

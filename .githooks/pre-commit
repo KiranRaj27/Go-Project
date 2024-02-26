@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Get the name of the current branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Check if the current branch is the main branch
+if [[ "$branch" == "main" ]]; then
+  echo "Error: You are not allowed to commit directly to the main branch."
+  exit 1
+fi
+
+# Allow the commit for other branches
+exit 0
