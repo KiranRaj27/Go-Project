@@ -12,5 +12,4 @@ migrationdown:
 generate:
 	sqlc generate
 
-clean:
-	rm -f rssagg
+
