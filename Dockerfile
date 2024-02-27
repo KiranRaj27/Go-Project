@@ -1,10 +1,2 @@
-# Use the official PostgreSQL image as the base
-FROM postgres
+FROM postgres:15.6
 
-# Set environment variables
-ENV POSTGRES_USER=myuser
-ENV POSTGRES_PASSWORD=sample
-ENV POSTGRES_DB=rssagg
-
-# Expose PostgreSQL port
-EXPOSE 5432
